@@ -1,0 +1,27 @@
+const express = require('express')
+const dotenv = require('dotenv')
+const cors = require('cors')
+dotenv.config();
+const { requestResponseLogger } = require('./middleware/requestResponseLogger')
+const {logger} = require('./middleware/logs');
+const { errorHandler } = require('./middleware/errorHandler');
+const { auth } = require('./middleware/auth');
+const { userRouter } = require('./router/userRouter');
+const eventRouter = require('./router/eventRouter');
+const app = express();
+const helmet = require('helmet')
+const { generalLimiter} = require("./middleware/rateLimiter");
+require('./utils/eventCatcher')
+
+app.use(helmet())
+app.use(express.json())
+app.use(cors({ origin: "http://localhost:3000"}))
+app.use(requestResponseLogger);
+app.use(generalLimiter);
+
+app.use('/users', auth, userRouter)
+app.use('/events', auth, eventRouter)
+
+app.use(errorHandler)
+
+module.exports = app;
