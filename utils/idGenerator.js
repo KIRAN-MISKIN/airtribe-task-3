@@ -8,4 +8,9 @@ const eventIdGenerator = ()=>{
     return id
 }
 
-module.exports = {userIdGenerator,eventIdGenerator}
+const bookingId = ()=>{
+    const id = Math.random().toString(36).substring(2,10)
+    return id
+}
+
+module.exports = {userIdGenerator,eventIdGenerator,bookingId}
