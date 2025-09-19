@@ -7,7 +7,7 @@ const getAllBookings = async (req, res) => {
     try {
         const { id } = req.user
         const userBookings = bookings.filter(booking => booking.user_id === id)
-        if (!userBookings) {
+        if (userBookings.length === 0) {
             const err = new Error("No Bookings found")
             err.status_code = statusCodes.BAD_REQUEST
             throw err

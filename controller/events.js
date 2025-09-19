@@ -1,7 +1,7 @@
-const { users, events } = require('../data/inMemoryStore')
+const { users, events, bookings } = require('../data/inMemoryStore')
 const statusCode = require('../config/statusCodes')
 const { createEventBodyValidation, updateEventBodyValidation } = require('../utils/validations')
-const { eventIdGenerator } = require('../utils/idGenerator')
+const { eventIdGenerator, bookingId } = require('../utils/idGenerator')
 const { responseHandler } = require('../utils/responseHandler')
 const { eventEmitter } = require('../utils/eventEmitter')
 
@@ -15,7 +15,7 @@ const createEvent = async (req, res) => {
             throw err
         }
 
-        if(req.body === undefined){
+        if (req.body === undefined) {
             const err = new Error("Request body cannot be empty")
             err.status_code = statusCode.BAD_REQUEST
             throw err
@@ -54,7 +54,7 @@ const updateEvent = async (req, res) => {
             throw err
         }
 
-        if(req.body === undefined){
+        if (req.body === undefined) {
             const err = new Error("Request body cannot be empty")
             err.status_code = statusCode.BAD_REQUEST
             throw err
@@ -207,7 +207,20 @@ const eventRegister = async (req, res) => {
             throw err
         }
         event_details.participants.push(details.email)
-        eventEmitter.emit('send_email', { email: details.email, event_id: _id, event_name: event_details.event_name, date: event_details.date,time:event_details.time,location:event_details.location,user_id:details.id,userName:details.name })
+        const booking_data = {
+            id: bookingId(),
+            event_id: _id,
+            event_name: event_details.event_name,
+            user_id: id,
+            userName: details.name,
+            email: details.email,
+            date: event_details.date,
+            time: event_details.time,
+            location: event_details.location,
+            status: "Booked"
+        }
+        bookings.push(booking_data)
+        eventEmitter.emit('send_email', { email: details.email, event_id: _id, event_name: event_details.event_name, date: event_details.date, time: event_details.time, location: event_details.location, user_id: details.id, userName: details.name })
         return responseHandler(res, statusCode.SUCCESS, { message: "Event Registered Successfully" })
     } catch (err) {
         throw err

@@ -12,18 +12,6 @@ const transporter = nodemailer.createTransport({
     })
 
 eventEmitter.on('send_email', (event) => {
-    const booking_data = {
-        id: bookingId(),
-        event_id: event.event_id,
-        event_name: event.event_name,
-        user_id: event.user_id,
-        userName,
-        email: event.email,
-        date: event.date,
-        time: event.time,
-        location: event.location
-    }
-    bookings.push(booking_data)
 
     let mailOptions = {
         from: process.env.EMAIL_USER,
@@ -40,7 +28,7 @@ eventEmitter.on('send_email', (event) => {
         </ul>
         
         <p>We look forward to seeing you at the event!</p>
-        <p>— The Event Managemant Team 🚀</p>
+        <p>— The Event Management Team 🚀</p>
       </div>`
     };
 
@@ -61,7 +49,7 @@ eventEmitter.on('Canceled Event', (booking) => {
         <h2>Hi ${booking.userName},</h2>
         <p>Your booking for <strong>${booking.event_name}</strong> has been canceled. We're sorry to see you go.</p>
         <p>If you have any questions or need further assistance, please feel free to contact us.</p>
-        <p>— The Event Management Team 🚀</p
+        <p>— The Event Management Team 🚀</p>
         </div>`
     };
     transporter.sendMail(mailOptions, function (error, info) {
