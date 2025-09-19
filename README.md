@@ -86,6 +86,12 @@ The backend system allows users to register/login, view and book events, and pro
 
 - `POST /bookings/:event_id`  
   Register for an event.
+  
+- `PUT /bookings/:booking_id/cancel`  
+  Cancel a registed event.  
+
+- `GET /bookings/`  
+  List all registed events.
 
 ---
 
@@ -120,7 +126,19 @@ npm install
 
 Create a `.env` file in the root directory and set:
 ```
+
 X_API_KEY=your_api_key_here
+
+PORT = your_port_number
+
+JWT_SECRET = your_jwt_secret
+
+TOKEY_EXPIREY = your_jwt_token_expirey
+
+EMAIL_USER = your_notification_email_id
+
+EMAIL_PASS = your_emails_app_password
+
 ```
 
 ### 4. Run the Server
