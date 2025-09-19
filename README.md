@@ -15,7 +15,6 @@ This repository contains the solution for the **AirTribe Assignment: Backend Sys
 - [Testing](#testing)
 - [Important Notes](#important-notes)
 - [Author](#author)
-- [License](#license)
 
 ---
 
@@ -192,9 +191,3 @@ Run with `npm test`.
 ## Author
 
 - [KIRAN-MISKIN](https://github.com/KIRAN-MISKIN)
-
----
-
-## License
-
-This project is open source under the [MIT License](LICENSE).
