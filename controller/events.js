@@ -207,7 +207,7 @@ const eventRegister = async (req, res) => {
             throw err
         }
         event_details.participants.push(details.email)
-        eventEmitter.emit('send_email', { email: details.email, event_id: _id, event_name: event_details.event_name, date: event_details.date,time:event_details.time })
+        eventEmitter.emit('send_email', { email: details.email, event_id: _id, event_name: event_details.event_name, date: event_details.date,time:event_details.time,location:event_details.location,user_id:details.id,userName:details.name })
         return responseHandler(res, statusCode.SUCCESS, { message: "Event Registered Successfully" })
     } catch (err) {
         throw err

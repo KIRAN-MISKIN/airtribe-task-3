@@ -23,5 +23,6 @@ const events = [{
     participants: []
   }];     // Stores event objects { id, event_id, date, time, description, participants: [] }
 const role = "user"
+const bookings = []
 
-module.exports = { users, events, role };
+module.exports = { users, events, role, bookings };

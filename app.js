@@ -11,6 +11,7 @@ const eventRouter = require('./router/eventRouter');
 const app = express();
 const helmet = require('helmet')
 const { generalLimiter} = require("./middleware/rateLimiter");
+const bookingRouter = require('./router/bookingRouter');
 require('./utils/eventCatcher')
 
 app.use(helmet())
@@ -21,6 +22,7 @@ app.use(generalLimiter);
 
 app.use('/users', auth, userRouter)
 app.use('/events', auth, eventRouter)
+app.use('/bookings', auth, bookingRouter)
 
 app.use(errorHandler)
 
