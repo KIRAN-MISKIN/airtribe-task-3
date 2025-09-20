@@ -390,4 +390,39 @@ describe('Events', () => {
         })
     })
 
+    describe('Get registered events', ()=>{
+        it('Should get all the registered events of a user', async ()=>{
+            const res1 = await request(app)
+                .get('/events/')
+                .set('x-api-key', api_key)
+                .set('Authorization', `Bearer ${token}`)
+            event_id = res1.body.data.events[0].id
+            const res2 = await request(app)
+                .post(`/events/${event_id}/register`)
+                .set('x-api-key', api_key)
+                .set('Authorization', `Bearer ${token}`)
+            const res = await request(app)
+                .get('/bookings/')
+                .set('x-api-key', api_key)
+                .set('Authorization', `Bearer ${token}`)
+            expect(res.status).toBe(200)
+            expect(res.body.data.events.length).toBe(1)
+        })
+    })
+
+    describe('Cancel Registed Event', ()=>{
+        it('Should cancel the registered event successfully', async ()=>{
+            const res3 = await request(app)
+                .get('/bookings/')
+                .set('x-api-key', api_key)
+                .set('Authorization', `Bearer ${token}`)
+            const booking_id = res3.body.data.events[0].id
+            const res = await request(app)
+                .put(`/bookings/${booking_id}/cancel`)
+                .set('x-api-key', api_key)
+                .set('Authorization', `Bearer ${token}`)
+            expect(res.status).toBe(200)
+            expect(res.body.message).toBe("Booking Canceled Successfully")
+        })
+    })
 })
