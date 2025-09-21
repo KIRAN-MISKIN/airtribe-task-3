@@ -126,13 +126,9 @@ const deleteEvent = async (req, res) => {
 
 const getEvents = async (req, res) => {
     try {
+        let newEvent = []
         const id = req.user.id
         const details = await users.find(user => user.id === id)
-        if (details.role !== "admin") {
-            const err = new Error("You do not have permission to create an event. Only administrators are allowed to perform this action.")
-            err.status_code = statusCode.FORBIDDEN
-            throw err
-        }
 
         if (req.body !== undefined) {
             const err = new Error("Request body should be empty")
@@ -145,7 +141,22 @@ const getEvents = async (req, res) => {
             err.status_code = statusCode.NOT_FOUND
             throw err
         }
-        return responseHandler(res, statusCode.SUCCESS, { events: events })
+        if (details.role !== "admin") {
+           newEvent = events.map(event=>{
+            return{
+                id:event.id,
+                event_name:event.event_name,
+                description:event.description,
+                date:event.date,
+                time:event.time,
+                location:event.location,
+                createdBy:event.createdBy,
+            }
+           })
+        } else {
+            newEvent = events
+        }
+        return responseHandler(res, statusCode.SUCCESS, { events: newEvent })
     } catch (err) {
         throw err
     }
@@ -153,13 +164,9 @@ const getEvents = async (req, res) => {
 
 const getEventById = async (req, res) => {
     try {
+        let newEvent = []
         const id = req.user.id
         const details = await users.find(user => user.id === id)
-        if (details.role !== "admin") {
-            const err = new Error("You do not have permission to create an event. Only administrators are allowed to perform this action.")
-            err.status_code = statusCode.FORBIDDEN
-            throw err
-        }
         const { _id } = req.params
         if (!_id) {
             const err = new Error("Event ID is required")
@@ -179,7 +186,21 @@ const getEventById = async (req, res) => {
             err.status_code = statusCode.NOT_FOUND
             throw err
         }
-        return responseHandler(res, statusCode.SUCCESS, { event: event_details })
+
+        if (details.role !== "admin") {
+           newEvent = {
+            id:event_details.id,
+            event_name:event_details.event_name,
+            description:event_details.description,
+            date:event_details.date,
+            time:event_details.time,
+            location:event_details.location,
+            createdBy:event_details.createdBy
+           }
+        } else {
+            newEvent = event_details
+        }
+        return responseHandler(res, statusCode.SUCCESS, { event: newEvent })
     } catch (err) {
         throw err
     }
