@@ -33,7 +33,11 @@ The backend system allows users to register/login, view and book events, and pro
 
 - **Event Management**
   - Create, update, delete events (admin only).
-  - List all events (open to all authenticated users).
+  - List all events (open to all authenticated users).  
+    - If the user is an admin, full event details are shown.  
+    - If the user is not an admin, only limited event details are shown: `id`, `event_name`, `description`, `date`, `time`, `location`, `createdBy`.
+    - The request body must be empty when fetching events. If a body is sent, a 400 error is returned ("Request body should be empty").
+    - If no events exist, a 404 error is returned ("No events available").
   - Event details include name, description, date, time, location, and participants.
 
 - **Booking System**
@@ -44,7 +48,7 @@ The backend system allows users to register/login, view and book events, and pro
   - Strict checks on email format, password complexity, event details, date (`DD-MM-YYYY`), and time (`HH:MM`, 24-hour).
 
 - **Middleware**
-  - Centralized error handling and request/response logging.
+  - Centralized error handling and error-only logging (logs are recorded only when errors occur).
   - Rate limiting to control API abuse.
   - Security headers via Helmet.
 
@@ -157,14 +161,38 @@ npm test
 ## Project Structure
 
 ```
-├── app.js                   # Main Express app setup
-├── controller/              # Business logic for users, events, bookings
-├── data/inMemoryStore.js    # In-memory storage for users, events, bookings
-├── middleware/              # Auth, logging, error handling, rate limiting
-├── router/                  # Express route definitions
-├── utils/                   # Validation, ID generation, event emitter, etc.
-├── test/                    # Jest & Supertest test suites
-└── ...
+├── app.js
+├── config/
+│   └── statusCodes.js
+├── controller/
+│   └── events.js
+│   └── bookings.js
+├── data/
+│   └── inMemoryStore.js
+├── logs/
+│   └── error.log
+├── middleware/
+│   └── auth.js
+│   └── errorHandler.js
+│   └── logs.js
+│   └── rateLimiter.js
+│   └── requestResponseLogger.js
+├── router/
+│   └── eventRouter.js
+│   └── bookingRouter.js
+│   └── userRouter.js
+├── test/
+│   └── users.test.js
+│   └── server.test.js
+├── utils/
+│   └── assignRole.js
+│   └── eventCatcher.js
+│   └── eventEmitter.js
+│   └── idGenerator.js
+│   └── responseHandler.js
+│   └── validations.js
+└── .env
+└── server.js
 ```
 
 ---
